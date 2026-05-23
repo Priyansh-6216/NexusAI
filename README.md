@@ -1,5 +1,7 @@
 # NexusAI — Enterprise AI-Powered Engineering Operations Platform
 
+![NexusAI Dashboard](docs/images/dashboard.svg)
+
 NexusAI is a production-scale SaaS platform designed to centralize AI-powered engineering, observability, incident management, and developer productivity.
 
 ## Vision
@@ -14,6 +16,43 @@ Provide an AI Operating System for software teams that unifies:
 - DevOps Automation
 - Chaos Engineering
 - Predictive Infrastructure Analytics
+
+## Day 3 Update — Frontend Dashboard
+
+The frontend now includes a modern enterprise dashboard skeleton built with Next.js and TailwindCSS.
+
+- Responsive sidebar navigation
+- Metrics cards for incident, cluster, and AI review health
+- AI insights summary panel
+- Incident alert timeline
+- Enterprise-style dashboard visual language
+
+## Architecture Overview
+
+```mermaid
+flowchart TD
+  A[Frontend] -->|HTTP / WebSocket| B[API Gateway]
+  B --> C[Auth Service]
+  B --> D[Monitoring Service]
+  B --> E[Incident Service]
+  B --> F[Code Review Service]
+  B --> G[Repo Intelligence Service]
+  B --> H[LLM Router Service]
+  B --> I[AI Agent Service]
+  D --> J[PostgreSQL]
+  C --> J
+  E --> J
+  F --> J
+  G --> J
+  H --> K[Vector DB]
+  I --> L[Kafka]
+  D --> L
+  E --> L
+  F --> L
+  G --> L
+  I --> M[Redis]
+  B --> M
+```
 
 ## Phase 1 — Foundation & Architecture
 
