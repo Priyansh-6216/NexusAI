@@ -1,0 +1,43 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      routes:
+        - id: auth-service
+          uri: ${AUTH_SERVICE_URL:http://localhost:8081}
+          predicates:
+            - Path=/api/auth/**
+        - id: monitoring-service
+          uri: ${MONITORING_SERVICE_URL:http://localhost:8082}
+          predicates:
+            - Path=/api/monitoring/**
+        - id: incident-service
+          uri: ${INCIDENT_SERVICE_URL:http://localhost:8083}
+          predicates:
+            - Path=/api/incidents/**
+        - id: code-review-service
+          uri: ${CODE_REVIEW_SERVICE_URL:http://localhost:8084}
+          predicates:
+            - Path=/api/reviews/**
+        - id: repo-intelligence-service
+          uri: ${REPO_INTELLIGENCE_SERVICE_URL:http://localhost:8085}
+          predicates:
+            - Path=/api/repos/**
+        - id: llm-router-service
+          uri: ${LLM_ROUTER_SERVICE_URL:http://localhost:8086}
+          predicates:
+            - Path=/api/llm/**
+        - id: ai-agent-service
+          uri: ${AI_AGENT_SERVICE_URL:http://localhost:8087}
+          predicates:
+            - Path=/api/agents/**
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

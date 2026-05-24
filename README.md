@@ -27,6 +27,17 @@ The frontend now includes a modern enterprise dashboard skeleton built with Next
 - Incident alert timeline
 - Enterprise-style dashboard visual language
 
+## Day 4 Update — Backend Core Setup
+
+The backend foundation now includes runnable Spring Boot skeletons for the API gateway and core microservices.
+
+- API Gateway application entrypoint with route configuration for backend services
+- Gateway status endpoint for service discovery and deployment checks
+- Auth service health and capability endpoints
+- Monitoring service health and platform summary endpoints
+- Incident, code review, repo intelligence, LLM router, and AI agent service skeletons
+- Baseline application configuration for local service ports, databases, Kafka, and management endpoints
+
 ## Architecture Overview
 
 ```mermaid

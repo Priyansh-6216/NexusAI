@@ -22,3 +22,8 @@ This service will provide AI-powered code review, security scanning, and test ge
 1. Define code review workflow.
 2. Add code diff ingestion endpoints.
 3. Connect to AI service for review analysis.
+
+## Day 4 Endpoints
+
+- `GET /api/reviews/health` - code review service readiness
+- `GET /api/reviews/capabilities` - starter review capability summary

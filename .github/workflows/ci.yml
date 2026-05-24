@@ -41,9 +41,18 @@ jobs:
 
       - name: Build backend services
         run: |
-          cd api-gateway && mvn -B -q package || true
-          cd ../auth-service && mvn -B -q package || true
-          cd ../monitoring-service && mvn -B -q package || true
+          for service in \
+            api-gateway \
+            auth-service \
+            monitoring-service \
+            incident-service \
+            code-review-service \
+            repo-intelligence-service \
+            llm-router-service \
+            ai-agent-service
+          do
+            (cd "$service" && mvn -B -q package)
+          done
 
       - name: Set up Python
         uses: actions/setup-python@v5

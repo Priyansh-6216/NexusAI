@@ -21,3 +21,8 @@ This service will orchestrate multi-agent workflows and enable tool execution.
 1. Add agent registry and workflow models.
 2. Implement coordination APIs.
 3. Build tool invocation and state persistence.
+
+## Day 4 Endpoints
+
+- `GET /api/agents/health` - AI agent service readiness
+- `GET /api/agents/registry` - starter agent registry summary

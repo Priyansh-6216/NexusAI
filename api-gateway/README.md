@@ -18,6 +18,10 @@ This service will route external requests to the appropriate backend microservic
 
 ## Next Steps
 
-1. Create Spring Boot starter project.
-2. Add gateway routes for auth, monitoring, incidents, and AI services.
-3. Configure security and OAuth/JWT filters.
+1. Expand route filters for auth, monitoring, incidents, and AI services.
+2. Configure JWT validation and RBAC policies.
+3. Add fallback and rate-limiting behavior.
+
+## Day 4 Endpoints
+
+- `GET /gateway/status` - gateway readiness and configured service route summary

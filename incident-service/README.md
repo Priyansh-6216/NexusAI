@@ -21,3 +21,8 @@ This service will manage incidents, correlate alerts, and provide root cause ana
 1. Design incident domain model.
 2. Add incident CRUD and correlation APIs.
 3. Integrate with alert events from monitoring.
+
+## Day 4 Endpoints
+
+- `GET /api/incidents/health` - incident service readiness
+- `GET /api/incidents/summary` - starter incident operations summary

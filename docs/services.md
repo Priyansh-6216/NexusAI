@@ -55,3 +55,16 @@
 - Coordinates multi-agent workflows
 - Maintains agent memory and tool registry
 - Executes automation tasks and incident playbooks
+
+## Day 4 Service Contracts
+
+| Service | Port | Starter endpoints |
+| --- | ---: | --- |
+| API Gateway | 8080 | `GET /gateway/status` |
+| Auth Service | 8081 | `GET /api/auth/health`, `GET /api/auth/capabilities` |
+| Monitoring Service | 8082 | `GET /api/monitoring/health`, `GET /api/monitoring/summary` |
+| Incident Service | 8083 | `GET /api/incidents/health`, `GET /api/incidents/summary` |
+| Code Review Service | 8084 | `GET /api/reviews/health`, `GET /api/reviews/capabilities` |
+| Repo Intelligence Service | 8085 | `GET /api/repos/health`, `GET /api/repos/capabilities` |
+| LLM Router Service | 8086 | `GET /api/llm/health`, `GET /api/llm/policies` |
+| AI Agent Service | 8087 | `GET /api/agents/health`, `GET /api/agents/registry` |

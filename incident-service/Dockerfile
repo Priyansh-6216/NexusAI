@@ -6,5 +6,5 @@ RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 RUN mvn -B -q dependency:go-offline
 COPY . .
 RUN mvn -B -q package -DskipTests
-EXPOSE 8082
+EXPOSE 8083
 CMD ["java", "-jar", "target/incident-service-0.0.1-SNAPSHOT.jar"]

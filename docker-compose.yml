@@ -55,6 +55,12 @@ services:
       - 8080:8080
     depends_on:
       - auth-service
+      - monitoring-service
+      - incident-service
+      - code-review-service
+      - repo-intelligence-service
+      - llm-router-service
+      - ai-agent-service
       - postgres
       - redis
 
@@ -65,6 +71,55 @@ services:
     depends_on:
       - postgres
       - redis
+
+  monitoring-service:
+    build: ./monitoring-service
+    ports:
+      - 8082:8082
+    depends_on:
+      - postgres
+      - kafka
+
+  incident-service:
+    build: ./incident-service
+    ports:
+      - 8083:8083
+    depends_on:
+      - kafka
+
+  code-review-service:
+    build: ./code-review-service
+    ports:
+      - 8084:8084
+    depends_on:
+      - kafka
+      - ai-services
+
+  repo-intelligence-service:
+    build: ./repo-intelligence-service
+    ports:
+      - 8085:8085
+    depends_on:
+      - kafka
+      - qdrant
+      - ai-services
+
+  llm-router-service:
+    build: ./llm-router-service
+    ports:
+      - 8086:8086
+    depends_on:
+      - kafka
+      - redis
+
+  ai-agent-service:
+    build: ./ai-agent-service
+    ports:
+      - 8087:8087
+    depends_on:
+      - kafka
+      - redis
+      - ai-services
 
   ai-services:
     build: ./ai-services

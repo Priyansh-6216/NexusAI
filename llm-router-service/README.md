@@ -21,3 +21,8 @@ This service will select the best LLM for specific tasks and handle failover.
 1. Define router API and policy model.
 2. Connect task requests to available LLM endpoints.
 3. Add failover and cost controls.
+
+## Day 4 Endpoints
+
+- `GET /api/llm/health` - LLM router service readiness
+- `GET /api/llm/policies` - starter routing policy summary

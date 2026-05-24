@@ -1,0 +1,20 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${AUTH_DATABASE_URL:jdbc:postgresql://localhost:5432/nexusai_auth}
+    username: ${AUTH_DATABASE_USER:nexusai}
+    password: ${AUTH_DATABASE_PASSWORD:nexusai}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

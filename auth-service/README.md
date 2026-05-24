@@ -23,3 +23,8 @@ This Spring Boot service will handle user identity and access control for NexusA
 1. Define user and role entities.
 2. Implement login/signup REST API.
 3. Add JWT filter and RBAC policies.
+
+## Day 4 Endpoints
+
+- `GET /api/auth/health` - auth service readiness
+- `GET /api/auth/capabilities` - planned auth and authorization capabilities
