@@ -1,36 +1,50 @@
 export default function Sidebar() {
   const navigation = [
-    { label: "Overview", active: true },
-    { label: "Incidents", active: false },
-    { label: "Kubernetes", active: false },
-    { label: "AI Reviews", active: false },
-    { label: "Repo Intelligence", active: false },
-    { label: "Settings", active: false },
+    { label: "Overview", count: "live", active: true },
+    { label: "Incidents", count: "4", active: false },
+    { label: "Services", count: "8", active: false },
+    { label: "Data Layer", count: "3", active: false },
+    { label: "AI Reviews", count: "12", active: false },
+    { label: "Agents", count: "4", active: false },
   ];
 
   return (
-    <aside className="hidden w-80 shrink-0 border-r border-slate-800 bg-slate-950/80 p-6 lg:block">
-      <div className="mb-10">
-        <p className="text-xs uppercase tracking-[0.35em] text-sky-400/80">NexusAI</p>
-        <h2 className="mt-4 text-3xl font-semibold text-white">Operations</h2>
-        <p className="mt-3 text-slate-400">Enterprise AI engineering platform dashboard for observability, security, and automation.</p>
+    <aside className="hidden w-72 shrink-0 border-r border-zinc-800 bg-zinc-950 lg:block">
+      <div className="border-b border-zinc-800 px-6 py-6">
+        <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">NexusAI</p>
+        <h2 className="mt-3 text-2xl font-semibold text-zinc-50">Operations</h2>
+        <p className="mt-2 text-sm leading-6 text-zinc-500">Build day 5 control surface</p>
       </div>
 
-      <nav className="space-y-2">
+      <nav className="space-y-1 p-3">
         {navigation.map((item) => (
           <button
             key={item.label}
-            className={`flex w-full items-center justify-between rounded-3xl px-5 py-4 text-left text-sm font-medium transition ${
+            className={`flex h-11 w-full items-center justify-between rounded-md px-3 text-left text-sm font-medium transition ${
               item.active
-                ? "bg-sky-500/15 text-sky-200 ring-1 ring-sky-500/30"
-                : "text-slate-300 hover:bg-slate-900/80 hover:text-white"
+                ? "bg-cyan-500/10 text-cyan-100 ring-1 ring-cyan-400/30"
+                : "text-zinc-400 hover:bg-zinc-900 hover:text-zinc-100"
             }`}
           >
             <span>{item.label}</span>
-            {item.active ? <span className="rounded-full bg-sky-500 px-2 py-1 text-[11px] uppercase tracking-[0.2em] text-white">Active</span> : null}
+            <span className="rounded bg-zinc-900 px-2 py-0.5 text-xs text-zinc-500">{item.count}</span>
           </button>
         ))}
       </nav>
+
+      <div className="mx-3 mt-5 rounded-lg border border-zinc-800 bg-zinc-900/60 p-4">
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-zinc-500">Environment</p>
+        <div className="mt-4 space-y-3 text-sm">
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-400">Branch</span>
+            <span className="font-medium text-zinc-100">main</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-zinc-400">Phase</span>
+            <span className="font-medium text-emerald-300">Day 5</span>
+          </div>
+        </div>
+      </div>
     </aside>
   );
 }

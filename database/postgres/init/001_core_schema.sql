@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS auth.users (
     email TEXT NOT NULL UNIQUE,
     display_name TEXT NOT NULL,
     password_hash TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'active',
+    status TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active', 'invited', 'disabled')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -59,9 +59,9 @@ CREATE TABLE IF NOT EXISTS monitoring.alert_rules (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL UNIQUE,
     metric_name TEXT NOT NULL,
-    comparator TEXT NOT NULL,
+    comparator TEXT NOT NULL CHECK (comparator IN ('gt', 'gte', 'lt', 'lte', 'eq')),
     threshold NUMERIC(18, 6) NOT NULL,
-    severity TEXT NOT NULL,
+    severity TEXT NOT NULL CHECK (severity IN ('critical', 'high', 'medium', 'low')),
     enabled BOOLEAN NOT NULL DEFAULT true,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -69,8 +69,8 @@ CREATE TABLE IF NOT EXISTS monitoring.alert_rules (
 CREATE TABLE IF NOT EXISTS incidents.incidents (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
-    severity TEXT NOT NULL,
-    status TEXT NOT NULL DEFAULT 'open',
+    severity TEXT NOT NULL CHECK (severity IN ('critical', 'high', 'medium', 'low')),
+    status TEXT NOT NULL DEFAULT 'open' CHECK (status IN ('open', 'investigating', 'mitigated', 'resolved')),
     impacted_service TEXT,
     summary TEXT,
     opened_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -89,12 +89,15 @@ CREATE TABLE IF NOT EXISTS incidents.timeline_events (
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
+CREATE INDEX IF NOT EXISTS idx_timeline_events_incident_created
+    ON incidents.timeline_events (incident_id, created_at DESC);
+
 CREATE TABLE IF NOT EXISTS code_review.review_runs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     repository TEXT NOT NULL,
     pull_request_number INTEGER,
     commit_sha TEXT,
-    status TEXT NOT NULL DEFAULT 'queued',
+    status TEXT NOT NULL DEFAULT 'queued' CHECK (status IN ('queued', 'running', 'completed', 'failed')),
     risk_score NUMERIC(5, 2),
     requested_by UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
@@ -107,7 +110,7 @@ CREATE INDEX IF NOT EXISTS idx_review_runs_repository_created
 CREATE TABLE IF NOT EXISTS code_review.review_findings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     review_run_id UUID NOT NULL REFERENCES code_review.review_runs(id) ON DELETE CASCADE,
-    severity TEXT NOT NULL,
+    severity TEXT NOT NULL CHECK (severity IN ('critical', 'high', 'medium', 'low', 'info')),
     category TEXT NOT NULL,
     file_path TEXT,
     line_number INTEGER,
@@ -115,6 +118,9 @@ CREATE TABLE IF NOT EXISTS code_review.review_findings (
     recommendation TEXT,
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+CREATE INDEX IF NOT EXISTS idx_review_findings_run_severity
+    ON code_review.review_findings (review_run_id, severity);
 
 CREATE TABLE IF NOT EXISTS repo_intelligence.repositories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -140,6 +146,9 @@ CREATE TABLE IF NOT EXISTS repo_intelligence.documents (
     UNIQUE (repository_id, path)
 );
 
+CREATE INDEX IF NOT EXISTS idx_documents_repository_language
+    ON repo_intelligence.documents (repository_id, language);
+
 CREATE TABLE IF NOT EXISTS llm_router.model_providers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     provider_name TEXT NOT NULL,
@@ -158,7 +167,7 @@ CREATE TABLE IF NOT EXISTS llm_router.routing_decisions (
     model_name TEXT NOT NULL,
     latency_ms INTEGER,
     estimated_cost NUMERIC(12, 6),
-    status TEXT NOT NULL,
+    status TEXT NOT NULL CHECK (status IN ('selected', 'completed', 'failed', 'fallback')),
     created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
@@ -177,12 +186,15 @@ CREATE TABLE IF NOT EXISTS agents.agent_definitions (
 CREATE TABLE IF NOT EXISTS agents.workflow_runs (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     agent_name TEXT NOT NULL REFERENCES agents.agent_definitions(name),
-    status TEXT NOT NULL DEFAULT 'queued',
+    status TEXT NOT NULL DEFAULT 'queued' CHECK (status IN ('queued', 'running', 'completed', 'failed', 'cancelled')),
     input_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
     output_payload JSONB NOT NULL DEFAULT '{}'::jsonb,
     started_at TIMESTAMPTZ NOT NULL DEFAULT now(),
     completed_at TIMESTAMPTZ
 );
+
+CREATE INDEX IF NOT EXISTS idx_workflow_runs_agent_started
+    ON agents.workflow_runs (agent_name, started_at DESC);
 
 INSERT INTO auth.roles (name, description)
 VALUES
