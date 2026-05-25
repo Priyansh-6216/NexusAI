@@ -33,6 +33,13 @@ NexusAI is built as a modular enterprise microservices platform with the followi
 4. Monitoring and incident services consume metrics and logs
 5. AI services use vector DB + embeddings for semantic queries
 
+## Data Layer
+
+- PostgreSQL owns durable relational records across service-specific schemas.
+- Redis stores short-lived sessions, rate limits, locks, workflow status, and provider health snapshots.
+- Qdrant stores semantic vectors for repository code chunks, incident context, and runbook knowledge.
+- Local Postgres initialization scripts live in `database/postgres/init`.
+
 ## Deployment Architecture
 
 - Each service runs in its own container

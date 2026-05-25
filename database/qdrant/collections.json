@@ -1,0 +1,44 @@
+{
+  "collections": [
+    {
+      "name": "repo_code_chunks",
+      "vector_size": 1536,
+      "distance": "Cosine",
+      "payload_schema": {
+        "repository_id": "keyword",
+        "provider": "keyword",
+        "owner_name": "keyword",
+        "repo_name": "keyword",
+        "path": "keyword",
+        "language": "keyword",
+        "commit_sha": "keyword",
+        "chunk_index": "integer",
+        "content_hash": "keyword"
+      }
+    },
+    {
+      "name": "incident_context",
+      "vector_size": 1536,
+      "distance": "Cosine",
+      "payload_schema": {
+        "incident_id": "keyword",
+        "service_name": "keyword",
+        "source": "keyword",
+        "severity": "keyword",
+        "created_at": "datetime"
+      }
+    },
+    {
+      "name": "runbook_knowledge",
+      "vector_size": 1536,
+      "distance": "Cosine",
+      "payload_schema": {
+        "runbook_id": "keyword",
+        "service_name": "keyword",
+        "owner_team": "keyword",
+        "version": "keyword",
+        "updated_at": "datetime"
+      }
+    }
+  ]
+}

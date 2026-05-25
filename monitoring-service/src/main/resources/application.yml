@@ -5,7 +5,7 @@ spring:
   application:
     name: monitoring-service
   datasource:
-    url: ${MONITORING_DATABASE_URL:jdbc:postgresql://localhost:5432/nexusai_monitoring}
+    url: ${MONITORING_DATABASE_URL:jdbc:postgresql://localhost:5432/nexusai}
     username: ${MONITORING_DATABASE_USER:nexusai}
     password: ${MONITORING_DATABASE_PASSWORD:nexusai}
   jpa:

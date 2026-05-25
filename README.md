@@ -38,6 +38,16 @@ The backend foundation now includes runnable Spring Boot skeletons for the API g
 - Incident, code review, repo intelligence, LLM router, and AI agent service skeletons
 - Baseline application configuration for local service ports, databases, Kafka, and management endpoints
 
+## Day 5 Update — Data Layer Design
+
+The platform now includes persistence contracts for PostgreSQL, Redis, and Qdrant.
+
+- PostgreSQL schemas for auth, monitoring, incidents, code review, repo intelligence, LLM routing, and AI agents
+- Docker Compose Postgres initialization for fresh local development volumes
+- Redis keyspace contracts for sessions, rate limits, locks, workflow state, and provider health
+- Qdrant collection definitions for repository chunks, incident context, and runbook knowledge
+- Data-layer documentation in `database/README.md`
+
 ## Architecture Overview
 
 ```mermaid
