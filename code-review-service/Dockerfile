@@ -1,10 +1,17 @@
-FROM eclipse-temurin:17-jdk-jammy
-WORKDIR /app
+FROM maven:3.9-eclipse-temurin-17 AS builder
+WORKDIR /workspace
 COPY pom.xml ./
-RUN mkdir -p src
-RUN apt-get update && apt-get install -y maven && rm -rf /var/lib/apt/lists/*
 RUN mvn -B -q dependency:go-offline
-COPY . .
+COPY src ./src
 RUN mvn -B -q package -DskipTests
-EXPOSE 8083
-CMD ["java", "-jar", "target/code-review-service-0.0.1-SNAPSHOT.jar"]
+
+FROM eclipse-temurin:17-jre-jammy AS runner
+WORKDIR /app
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends curl \
+  && rm -rf /var/lib/apt/lists/*
+COPY --from=builder /workspace/target/code-review-service-0.0.1-SNAPSHOT.jar app.jar
+EXPOSE 8084
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+  CMD curl -fsS http://127.0.0.1:8084/actuator/health >/dev/null || exit 1
+ENTRYPOINT ["java", "-jar", "app.jar"]

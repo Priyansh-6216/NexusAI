@@ -1,6 +1,7 @@
 services:
   postgres:
     image: postgres:15
+    restart: unless-stopped
     environment:
       POSTGRES_USER: nexusai
       POSTGRES_PASSWORD: nexusai
@@ -10,14 +11,26 @@ services:
       - ./database/postgres/init:/docker-entrypoint-initdb.d:ro
     ports:
       - 5432:5432
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nexusai -d nexusai"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   redis:
     image: redis:7
+    restart: unless-stopped
     ports:
       - 6379:6379
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   zookeeper:
     image: confluentinc/cp-zookeeper:8.4.0
+    restart: unless-stopped
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
@@ -26,6 +39,7 @@ services:
 
   kafka:
     image: confluentinc/cp-kafka:8.4.0
+    restart: unless-stopped
     depends_on:
       - zookeeper
     environment:
@@ -38,95 +52,160 @@ services:
 
   qdrant:
     image: qdrant/qdrant:latest
+    restart: unless-stopped
     ports:
       - 6333:6333
 
   frontend:
     build: ./frontend
+    restart: unless-stopped
     ports:
-      - 3000:3000
+      - 3000:80
     depends_on:
-      - api-gateway
+      api-gateway:
+        condition: service_healthy
 
   api-gateway:
     build: ./api-gateway
+    restart: unless-stopped
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8081
+      MONITORING_SERVICE_URL: http://monitoring-service:8082
+      INCIDENT_SERVICE_URL: http://incident-service:8083
+      CODE_REVIEW_SERVICE_URL: http://code-review-service:8084
+      REPO_INTELLIGENCE_SERVICE_URL: http://repo-intelligence-service:8085
+      LLM_ROUTER_SERVICE_URL: http://llm-router-service:8086
+      AI_AGENT_SERVICE_URL: http://ai-agent-service:8087
     ports:
       - 8080:8080
     depends_on:
-      - auth-service
-      - monitoring-service
-      - incident-service
-      - code-review-service
-      - repo-intelligence-service
-      - llm-router-service
-      - ai-agent-service
-      - postgres
-      - redis
+      auth-service:
+        condition: service_healthy
+      monitoring-service:
+        condition: service_healthy
+      incident-service:
+        condition: service_healthy
+      code-review-service:
+        condition: service_healthy
+      repo-intelligence-service:
+        condition: service_healthy
+      llm-router-service:
+        condition: service_healthy
+      ai-agent-service:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   auth-service:
     build: ./auth-service
+    restart: unless-stopped
+    environment:
+      AUTH_DATABASE_URL: jdbc:postgresql://postgres:5432/nexusai
+      AUTH_DATABASE_USER: nexusai
+      AUTH_DATABASE_PASSWORD: nexusai
     ports:
       - 8081:8081
     depends_on:
-      - postgres
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   monitoring-service:
     build: ./monitoring-service
+    restart: unless-stopped
+    environment:
+      MONITORING_DATABASE_URL: jdbc:postgresql://postgres:5432/nexusai
+      MONITORING_DATABASE_USER: nexusai
+      MONITORING_DATABASE_PASSWORD: nexusai
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - 8082:8082
     depends_on:
-      - postgres
-      - kafka
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
 
   incident-service:
     build: ./incident-service
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - 8083:8083
     depends_on:
-      - kafka
+      kafka:
+        condition: service_started
 
   code-review-service:
     build: ./code-review-service
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - 8084:8084
     depends_on:
-      - kafka
-      - ai-services
+      kafka:
+        condition: service_started
+      ai-services:
+        condition: service_healthy
 
   repo-intelligence-service:
     build: ./repo-intelligence-service
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - 8085:8085
     depends_on:
-      - kafka
-      - qdrant
-      - ai-services
+      kafka:
+        condition: service_started
+      qdrant:
+        condition: service_started
+      ai-services:
+        condition: service_healthy
 
   llm-router-service:
     build: ./llm-router-service
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - 8086:8086
     depends_on:
-      - kafka
-      - redis
+      kafka:
+        condition: service_started
+      redis:
+        condition: service_healthy
 
   ai-agent-service:
     build: ./ai-agent-service
+    restart: unless-stopped
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:9092
     ports:
       - 8087:8087
     depends_on:
-      - kafka
-      - redis
-      - ai-services
+      kafka:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      ai-services:
+        condition: service_healthy
 
   ai-services:
     build: ./ai-services
+    restart: unless-stopped
     ports:
       - 8000:8000
     depends_on:
-      - qdrant
-      - redis
+      qdrant:
+        condition: service_started
+      redis:
+        condition: service_healthy
 
 volumes:
   postgres-data:

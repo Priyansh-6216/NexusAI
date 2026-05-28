@@ -1,6 +1,6 @@
 # NexusAI Frontend
 
-This folder will contain the React + Next.js dashboard for NexusAI.
+This folder contains the React + Next.js dashboard for NexusAI.
 
 ## Purpose
 
@@ -15,11 +15,20 @@ This folder will contain the React + Next.js dashboard for NexusAI.
 - React
 - TypeScript
 - TailwindCSS
-- Recharts / charting library
-- WebSockets for real-time updates
+- Static export for GitHub Pages and containerized local hosting
+
+## Docker
+
+The frontend Docker image builds the static Next.js export and serves it with Nginx.
+
+```bash
+docker compose up --build frontend
+```
+
+The dashboard is available at `http://localhost:3000`.
 
 ## Next Steps
 
-1. Initialize a Next.js app in this folder.
-2. Add TailwindCSS and layout components.
-3. Wire API requests through the gateway.
+1. Wire API requests through the gateway.
+2. Add live service health and data-layer status polling.
+3. Introduce charting for service trends and incident timelines.

@@ -10,10 +10,10 @@ const metrics = [
     tone: "emerald" as const,
   },
   {
-    label: "Data Schemas",
-    value: "7",
+    label: "Docker Images",
+    value: "10",
     delta: "new",
-    description: "PostgreSQL schemas cover the core service boundaries through Day 5.",
+    description: "Frontend, AI services, gateway, and backend microservices are containerized.",
     tone: "cyan" as const,
   },
   {
@@ -24,10 +24,10 @@ const metrics = [
     tone: "amber" as const,
   },
   {
-    label: "Review Risk",
-    value: "12%",
-    delta: "low",
-    description: "Queued code review runs are below the current risk escalation threshold.",
+    label: "Data Schemas",
+    value: "7",
+    delta: "ready",
+    description: "PostgreSQL schemas remain mounted into local Postgres for fresh volumes.",
     tone: "emerald" as const,
   },
 ];
@@ -65,10 +65,10 @@ const dataStores = [
 ];
 
 const timeline = [
+  ["15:48", "Compose stack refined", "health checks and service env"],
+  ["15:39", "Static frontend containerized", "Nginx on localhost:3000"],
+  ["15:30", "Java services optimized", "multi-stage Maven builds"],
   ["15:18", "Postgres init mounted", "database/postgres/init"],
-  ["15:12", "Schema model refined", "7 logical service schemas"],
-  ["14:58", "Gateway routes aligned", "8 backend services"],
-  ["14:41", "Day 4 backend pushed", "c876978"],
 ];
 
 export default function Home() {
@@ -82,15 +82,15 @@ export default function Home() {
               <div>
                 <div className="flex flex-wrap items-center gap-2">
                   <span className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-xs font-semibold text-emerald-200">
-                    Build Day 5
+                    Build Day 6
                   </span>
                   <span className="rounded-md border border-zinc-700 bg-zinc-900 px-2.5 py-1 text-xs font-medium text-zinc-400">
-                    Data layer ready
+                    Local stack ready
                   </span>
                 </div>
                 <h1 className="mt-4 text-3xl font-semibold text-zinc-50">Engineering Operations Dashboard</h1>
                 <p className="mt-2 max-w-3xl text-sm leading-6 text-zinc-400">
-                  Service health, incident posture, AI workflows, and persistence contracts in one operational view.
+                  Service health, incident posture, AI workflows, persistence contracts, and local Docker status in one operational view.
                 </p>
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 xl:w-[520px]">

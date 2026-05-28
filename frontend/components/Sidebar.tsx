@@ -13,7 +13,7 @@ export default function Sidebar() {
       <div className="border-b border-zinc-800 px-6 py-6">
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-cyan-300">NexusAI</p>
         <h2 className="mt-3 text-2xl font-semibold text-zinc-50">Operations</h2>
-        <p className="mt-2 text-sm leading-6 text-zinc-500">Build day 5 control surface</p>
+        <p className="mt-2 text-sm leading-6 text-zinc-500">Build day 6 control surface</p>
       </div>
 
       <nav className="space-y-1 p-3">
@@ -41,7 +41,7 @@ export default function Sidebar() {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-zinc-400">Phase</span>
-            <span className="font-medium text-emerald-300">Day 5</span>
+            <span className="font-medium text-emerald-300">Day 6</span>
           </div>
         </div>
       </div>

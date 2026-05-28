@@ -49,6 +49,16 @@ The platform now includes persistence contracts for PostgreSQL, Redis, and Qdran
 - Qdrant collection definitions for repository chunks, incident context, and runbook knowledge
 - Data-layer documentation in `database/README.md`
 
+## Day 6 Update — Local Docker Development
+
+The platform now has a refined Docker Compose setup for local development.
+
+- Multi-stage Dockerfiles for frontend, Java services, and Python AI services
+- Static frontend container served through Nginx on `localhost:3000`
+- Compose health checks and service-aware environment variables
+- Postgres, Redis, Kafka, Qdrant, API gateway, backend services, AI services, and frontend wired into one stack
+- Local runbook in `docs/local-development.md`
+
 ## Architecture Overview
 
 ```mermaid
